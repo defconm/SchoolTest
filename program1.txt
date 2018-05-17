@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Random;
 
 public class RoqueniNoneUniform
 {
@@ -26,16 +27,8 @@ public class RoqueniNoneUniform
 	public static int[] createFirstArray(int n)
 	{
 		int[] array = new array[n];
-		if(n%2==0)
-		{
-			int first = n/2;
-			int second = first;
-		}
-		else
-		{
-			int first = (n+1)/2;
-			int second = n - first;
-		}
+		int first = (int) n/2;
+		int second = n - first;
 		for(int i = 0; i < first; i++)
 		{
 			array[i] = 0;
@@ -49,25 +42,10 @@ public class RoqueniNoneUniform
 	
 	public static int[] createSecondArray(int n)
 	{
-		int first;
-		int second;
-		int third;
-		int fourth;
-		//create for an even division of 2
-		if(n%2 == 0)
-		{
-			first = n/2;
-			second = first/2;
-			third = second/2;
-			fourth = third/2;
-		}
-		else
-		{
-			first = (n+1)/2;
-			second = first/2;
-			third = (second-1)/2;
-			forth = third/2;
-		}
+		int first = (int)n/2;
+		int second = (int) (n-first)/2;
+		int third = (int) (n-first-second)/2;
+		int fourth = n - first - second - third;
 		int[] array = new array[n]
 		for(int i = 0; i < first - 1; i++)
 		{
@@ -121,8 +99,8 @@ public class RoqueniNoneUniform
 		int secondRandomIndex;
 		for(int i = 0; array.length - 1; i++)
 		{
-			firstRandomIndex = ran.nextInt(0, array.length-1);
-			secondRandomIndex = ran.nextInt(0, array.length-1);
+			firstRandomIndex = ran.nextInt(array.length-1);
+			secondRandomIndex = ran.nextInt(array.length-1);
 			temp = array[firstRandomIndex];
 			array[firstRandomIndex] = array[secondRandomIndex];
 			array[secondRandomIndex] = temp;
