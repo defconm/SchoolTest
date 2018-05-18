@@ -1,6 +1,5 @@
 import java.util.Scanner;
 import java.util.Random;
-import java.util.*;
 
 public class RoqueniNoneUniform
 {
@@ -41,6 +40,7 @@ public class RoqueniNoneUniform
 		return randomizeArray(array);
 	}
 	
+	/**test a different method*/
 	public static int[] createSecondArray(int n)
 	{
 		int first = (int)n/2;
@@ -65,6 +65,27 @@ public class RoqueniNoneUniform
 			array[g] = 3;
 		}
 		return randomizeArray(array);
+	}
+
+	//test
+	public static int[] createSecondArray(int n)
+	{
+		int remainder = n;
+		int half; 
+		int[] array = new array[n];
+		int insertNumb = 0;
+		int previous = 0;
+		while(remainder != 0)
+		{
+			half = remainder/2;
+			remainder = remainder - half;
+			for(int i = half; i >= 0; i--)
+			{
+				array[previous + i] = insertNumb; 
+			}
+			insertNumb++;
+			previous += half; 
+		}
 	}
 
 	public static int[] createThirdArray(int n)
