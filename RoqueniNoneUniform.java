@@ -1,4 +1,4 @@
-/*
+/**
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -56,7 +56,6 @@ public class RoqueniNoneUniform
 	public static Integer[] createSecondArray(int n)
 	{
             int half = n/2;
-            int remain = n- half;
             int insertNumb = 0;
             int timesPerHalf = 0;
             Integer[] a = new Integer[n];
@@ -85,7 +84,6 @@ public class RoqueniNoneUniform
 
 	public static Integer[] createThirdArray(int n)
 	{
-            System.out.println("starting 3rd");
 		Random ran = new Random();
 		Integer[] array = new Integer[n];
                 for(int i = 0; i < array.length; i++)
@@ -100,7 +98,6 @@ public class RoqueniNoneUniform
                     }
                 }
                 
-            System.out.println("array 3 complete");
 	    return randomizeArray(array);
 	}
 
