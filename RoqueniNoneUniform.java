@@ -12,35 +12,30 @@ public class RoqueniNoneUniform
 {
 	public static void main(String[] args)
 	{
-		Scanner in = new Scanner(System.in);
-		System.out.println("Please enter how many data points you want inside the test data");
-		int n = in.nextInt();
-		createArrays(n);
+		createArraysAndTest();
 	}
 
-	public static void createArrays(int n)
+	public static void createArraysAndTest()
 	{
-            if(n <= 0)
-            {
-                System.out.println("can not create array with size less than or equal to 0");
-            }
-            else
-            {
-		Integer[] halfAndHalfArray = createFirstArray(n);
-		Integer[] halfOneQuarterArray = createSecondArray(n);
-		Integer[] halfRandomArray = createThirdArray(n);
-		testSelectionSort(halfAndHalfArray, "first");
-		testSelectionSort(halfOneQuarterArray, "second");
-		testSelectionSort(halfRandomArray, "third");
-                randomizeArray(halfAndHalfArray);
-                randomizeArray(halfOneQuarterArray);
-                randomizeArray(halfRandomArray);
-		testInsertionSort(halfAndHalfArray, "first");
-		testInsertionSort(halfOneQuarterArray, "second"); 
-		testInsertionSort(halfRandomArray, "third");
-            }
-	}
-
+		Integer[] firstArray = createFirstArray(655536);
+		Integer[] secondArray = createSecondArray(65536);
+		Integer[] thirdArray = createThirdArray(65536);
+                Integer[] firstArrayDoubled = createFirstArray(131072);
+		Integer[] secondArrayDoubled = createSecondArray(131072);
+		Integer[] thirdArrayDoubled = createThirdArray(131072);
+		testSelectionSort(firstArray, firstArrayDoubled);
+		testSelectionSort(secondArray, secondArrayDoubled);
+		testSelectionSort(thirdArray, thirdArrayDoubled);
+                randomizeArray(firstArray);
+                randomizeArray(secondArray);
+                randomizeArray(thirdArray);
+                randomizeArray(firstArrayDoubled);
+                randomizeArray(secondArrayDoubled);
+                randomizeArray(thirdArrayDoubled);
+		testInsertionSort(firstArray, firstArrayDoubled);
+		testInsertionSort(secondArray, secondArrayDoubled); 
+		testInsertionSort(thirdArray, thirdArrayDoubled);
+        }
 	public static Integer[] createFirstArray(int n)
 	{
 		Integer[] array = new Integer[n];
@@ -127,25 +122,34 @@ public class RoqueniNoneUniform
 		return array;
 	}
 
-	public static void testInsertionSort(Comparable[] a, String str)
+	public static void testInsertionSort(Comparable[] a, Comparable[] b)
 	{
 		Stopwatch sw = new Stopwatch();
                 InsertionSort sort = new InsertionSort();
                 sort.sort(a);
 		double time = sw.elapsedTime();
-		System.out.println("For the " + str + " array using Insertion Sort " + sort.getN() + " elements took " + time + " seconds.");
-		
-			
+                sw = null;
+                sort = null;
+                sw = new Stopwatch();
+                sort.sort(b);
+                double time2 = sw.elapsedTime();
+		System.out.println("For the array using Insertion Sort b was " + Math.log(time/time2)/Math.log(2.0));	
 	}
 
 
-	public static void testSelectionSort(Comparable[] a, String str)
+	public static void testSelectionSort(Comparable[] a, Comparable[] b)
 	{
 		Stopwatch sw = new Stopwatch();
                 SelectionSort selecSort = new SelectionSort();
                 selecSort.sort(a);
                 double time = sw.elapsedTime();
-		System.out.println("For the " + str + " array using Selection Sort " + selecSort.getN() + " elements took " + time + " seconds.");
+                sw = null;
+                selecSort = null;
+                sw = new Stopwatch();
+                selecSort = new SelectionSort();
+                selecSort.sort(b);
+                double time2 = sw.elapsedTime();
+		System.out.println("For the array using Selection Sort b was " + Math.log(time/time2)/Math.log(2.0) );
 	}
 
 }
