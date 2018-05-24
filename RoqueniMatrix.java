@@ -10,11 +10,11 @@ public class RoqueniMatrix implements Matrix {
     private int[][] matrix;
     public RoqueniMatrix(int[][] matrix)
     {
-    	if(matrix.length == 0)
-    		this.matrix = null;
-    	else
+    	if(matrix.length > 0)
     		this.matrix = new int[matrix.length][matrix[0].length];
-    	if(this.matrix != null)
+    	else
+    		this.matrix = new int[0][0];
+    	if(this.matrix.length > 0 && this.matrix[0].length >0)
     	{
     		for(int i = 0; i < matrix.length; i++)
     		{
@@ -29,30 +29,28 @@ public class RoqueniMatrix implements Matrix {
 
 	@Override
 	public int getElement(int y, int x) {
-		if(matrix == null || matrix.length < y && matrix[y].length < x)
-			return -1;
+		if(matrix == null || matrix.length < y || matrix[y].length < x)
+			throw new NullPointerException();
 		
 		return matrix[y][x];
 	}
 
 	@Override
 	public int getRows() {
-		if(matrix == null)
-			return 0;
 		return matrix.length;
 	}
 
 	@Override
 	public int getColumns() {
-		if(matrix == null)
+		if(getRows() == 0)
 			return 0;
 		return matrix[0].length;
 	}
 
 	@Override
 	public Matrix scale(int scalar) {
-		if(matrix == null)
-			return null;
+		if(getRows() == 0)
+			throw new RuntimeException("Empty array");
 		int[][] creating = new int[getRows()][getColumns()];
 		for(int i = 0; i < matrix.length; i++)
 		{
@@ -66,7 +64,7 @@ public class RoqueniMatrix implements Matrix {
 
 	@Override
 	public Matrix plus(Matrix other) {
-		if(matrix == null || other.getRows() == 0)
+		if(getRows() == 0 || other.getRows() == 0)
 			throw new RuntimeException("Empty Array");
 		if(matrix.length != other.getRows() || matrix[0].length != other.getColumns())
 			throw new RuntimeException();
@@ -83,7 +81,7 @@ public class RoqueniMatrix implements Matrix {
 
 	@Override
 	public Matrix minus(Matrix other) {
-		if(matrix == null || other.getRows() == 0)
+		if(getRows() == 0|| other.getRows() == 0)
 			throw new RuntimeException("Empty Array");
 		if(matrix.length != other.getRows() || matrix[0].length != other.getColumns())
 			throw new RuntimeException();
@@ -100,7 +98,7 @@ public class RoqueniMatrix implements Matrix {
 
 	@Override
 	public Matrix multiply(Matrix other) {
-		if(matrix == null || other.getRows() == 0)
+		if(getRows() == 0 || other.getRows() == 0)
 			throw new RuntimeException("Empty Array");
 		if(matrix[0].length != other.getRows())
 			throw new RuntimeException();
@@ -122,14 +120,13 @@ public class RoqueniMatrix implements Matrix {
 	@Override
 	public boolean equals(Object other)
 	{
-		if(matrix == null)
+		if(!(other instanceof Matrix))
 			return false;
-		Matrix o;
-		if(other instanceof Matrix)
-			o = (Matrix) other;
-		else
+		Matrix o = (Matrix) other;
+		if(o.getRows() == 0 && getRows() == 0 )
+			return true;
+		if(o.getRows() == 0 || getRows() == 0)
 			return false;
-		
 		for(int i = 0; i < matrix.length; i++)
 		{
 			for(int j = 0; j < matrix[i].length; j++)
@@ -144,8 +141,8 @@ public class RoqueniMatrix implements Matrix {
 	@Override
 	public String toString()
 	{
-		if(matrix == null)
-			return null;
+		if(getRows() == 0)
+			return "";
 		String str = "";
 		for(int i = 0; i < matrix.length; i++)
 		{
