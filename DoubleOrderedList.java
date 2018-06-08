@@ -2,7 +2,9 @@ package jsjf;
 
 import java.util.Iterator;
 
-public class DoubleOrderedList<T extends Comparable<T>> implements OrderedListADT<T>
+public class DoubleOrderedList<T> 
+        implements OrderedListADT<T>
+       
 {
 
 
@@ -37,19 +39,24 @@ public class DoubleOrderedList<T extends Comparable<T>> implements OrderedListAD
 		return tmp.getElement();
 	}
 
-	@Override
+	
+        @Override
 	public T remove(T element) 
 	{
 		tmp = first;
+                if(!(element instanceof Comparable))
+                    throw new NonComparableElementException("DoubleLink");
+                Comparable<T> comparableElement = (Comparable<T>)element;
 		while(tmp.getNext() != null)
 		{
-			if(tmp.getElement().equals(element))
+			if(comparableElement.compareTo(tmp.getElement()) == 0)
 			{
 				tmp.getNext().setPrevious(tmp.getPrevious());
 				tmp.getPrevious().setNext(tmp.getNext());
 				count--;
 				return tmp.getElement();
 			}
+                        tmp = tmp.getNext();
 		}
 		throw new ElementNotFoundException("DoubleList");
 	}
@@ -94,83 +101,85 @@ public class DoubleOrderedList<T extends Comparable<T>> implements OrderedListAD
 	{
 		return count;
 	}
-	
+	@Override
 	public String toString()
 	{
 		String str = "";
 		tmp = first;
 		boolean done = false;
 		while(!done)
-		{
-			str += " " + tmp.getElement();
-			if(tmp.getNext()!= null)
-				tmp = tmp.getNext();
-			else
-				done = true;
-		}
-		System.out.println(count);
+                {
+                    str += tmp.getElement() + " ";
+                    tmp = tmp.getNext();
+                    if(tmp == null)
+                        done = true;
+                }
 		return str;
 	}
 	
-
-	@Override
+	
+        @Override
 	public void add(T element) 
 	{
-		try 
-		{
-			tmp = first;
-			if(count == 0)
-			{
-				first = new DoubleNode<T>(element);
-				count++;
-			}
-			while(tmp.getNext() != null)
-			{
-				if(count == 1 && tmp.getElement().compareTo(element) > 0)
-				{
-					first.setNext(new DoubleNode<T>(element));
-					count++;
-					return;
-				}
-				if(count == 1 && tmp.getElement().compareTo(element) < 0)
-				{
-					first.setPrevious(new DoubleNode<T>(element));
-					first.getPrevious().setNext(first);
-					first.setNext(null);
-					first = first.getPrevious();
-					count++;
-					return;
-				}
-				if(tmp.getElement().compareTo(element) > 0 && ((Comparable<T>) tmp.getNext().getElement()).compareTo(element) < 0)
-				{
-					DoubleNode<T> toAdd = new DoubleNode<T>(element);
-					toAdd.setNext(tmp.getNext());
-					toAdd.setPrevious(tmp);
-					tmp.setNext(toAdd);
-					count++;
-					return;
-				}
-				tmp = tmp.getNext();
-			}
-		}
-		catch(Exception e)
-		{
-			
-		}
-		
-	}
-	
-	public int compareTo(T a)
-	{
-		int compared = 0;
-		try {
-		compared = tmp.getElement().compareTo(a);
-		}
-		catch(Exception e)
-		{
-			throw new NonComparableElementException("");
-		}
-		return compared;
-	}
+            DoubleNode<T> current = null;
+            DoubleNode<T> previous = null;
+            DoubleNode<T> tmp = null;
+            if(!(element instanceof Comparable))
+                throw new NonComparableElementException("DoubleList");
+            Comparable<T> comparableElement = (Comparable<T>)element;
+            if(first == null)
+            {
+                first = new DoubleNode<T>(element);
+                count++;
+                return;
+            }
+            current = previous = first;
+            if(first.getNext() == null)
+            {
+                if(comparableElement.compareTo(current.getElement()) > 0)
+                {
+                    tmp = new DoubleNode<T>(element);
+                    first.setNext(tmp);
+                    tmp.setPrevious(first);
+                    last = tmp;
+                }
+                else
+                {
+                    first.setPrevious(new DoubleNode<T>(element));
+                    first = first.getPrevious();
+                    first.setNext(current);
+                    last = current;
+                }
+                count++;
+                return;
+            }
+            while(current.getNext() != null)
+            {
+                if(comparableElement.compareTo(current.getElement()) < 0)
+                {
+                    tmp = new DoubleNode<T>(element);
+                    if(current == first)
+                    {
+                        first = tmp;
+                        first.setNext(current);
+                        current.setPrevious(first);
+                    }
+                    else
+                    {
+                        tmp.setNext(current);
+                        tmp.setPrevious(previous);
+                        current.setPrevious(tmp);
+                        previous.setNext(tmp);
+                    }
+                    count++;
+                    return;
+                }
+                else
+                {
+                    previous = current;
+                    current = current.getNext();
+                }
+            }
+        }
 
 }
