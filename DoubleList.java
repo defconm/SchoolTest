@@ -1,10 +1,40 @@
 package jsjf;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 public class DoubleList<T> implements ListADT<T>, Iterable<T>
 		
 {
+	private class Itr<T> implements Iterator<T>
+	{
+		private int itrCount;
+		private DoubleNode<T> current;
+		
+		public Itr()
+		{
+			current = (DoubleNode<T>) first;
+			itrCount = count;
+		}
+		public boolean hasNext() throws ConcurrentModificationException
+		{
+			 if(itrCount != count)
+				 throw new ConcurrentModificationException();
+			 return (current != null);
+		}
+		public T next() throws ConcurrentModificationException
+		{
+			if(!hasNext())
+				throw new ConcurrentModificationException();
+			T result = current.getElement();
+			current = current.getNext();
+			return result;
+		}
+		public void remove() throws UnsupportedOperationException
+		{
+			throw new UnsupportedOperationException();
+		}
+	}
 
 	DoubleNode<T> first;
 	DoubleNode<T> last;
@@ -21,8 +51,8 @@ public class DoubleList<T> implements ListADT<T>, Iterable<T>
 	@Override
 	public Iterator<T> iterator() 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		Itr<T> itr = new Itr<>();
+		return itr;
 	}
 
 	@Override
