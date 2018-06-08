@@ -6,10 +6,17 @@ public class DoubleList<T> implements ListADT<T>, Iterable<T>
 		
 {
 
-	private DoubleNode<T> first;
-	private DoubleNode<T> last;
-	private int count = 0;
-	private DoubleNode<T> tmp;
+	DoubleNode<T> first;
+	DoubleNode<T> last;
+	int count = 0;
+	DoubleNode<T> tmp;
+	
+	public DoubleList()
+	{
+		first = null;
+		last = null;
+		tmp = null;
+	}
 	
 	@Override
 	public Iterator<T> iterator() 
@@ -42,15 +49,19 @@ public class DoubleList<T> implements ListADT<T>, Iterable<T>
 	public T remove(T element) 
 	{
 		tmp = first;
+                if(!(element instanceof Comparable))
+                    throw new NonComparableElementException("DoubleLink");
+                Comparable<T> comparableElement = (Comparable<T>)element;
 		while(tmp.getNext() != null)
 		{
-			if(tmp.getElement().equals(element))
+			if(comparableElement.compareTo(tmp.getElement()) == 0)
 			{
 				tmp.getNext().setPrevious(tmp.getPrevious());
 				tmp.getPrevious().setNext(tmp.getNext());
 				count--;
 				return tmp.getElement();
 			}
+                        tmp = tmp.getNext();
 		}
 		throw new ElementNotFoundException("DoubleList");
 	}

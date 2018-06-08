@@ -13,7 +13,6 @@ public class Driver {
         //    your writeup.
         
         list.add(23);
-        System.out.println("done");
         list.add(24);	
         list.add(16);
         list.add(3);	
@@ -24,6 +23,7 @@ public class Driver {
         list.add(14);	
         list.add(1);
 
+        System.out.println("Size:" + list.size());
         System.out.println(list);
         
         list.remove(7);
@@ -33,6 +33,7 @@ public class Driver {
         list.remove(14);
         list.removeLast();
         
+        System.out.println("Size: " + list.size());
         System.out.println(list);
         
         /* Test Results:
