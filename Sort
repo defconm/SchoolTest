@@ -1,0 +1,198 @@
+/**
+ * Implements various sorting algorithms.
+ * 
+ * @author (your name), Acuna, Sedgewick
+ * @verison (version)
+ */
+
+public class BaseSorting {
+     
+    /**
+     * Entry point for sample output.
+     * 
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        //Q1
+        String[] a = {"S", "O", "R", "T", "E", "X", "A", "M", "P", "L", "E"};
+        quicksortmid(a);
+        assert isSorted(a); //requires assertions enabled.
+        show(a);
+        
+        //Q2
+        String[] b = {"S", "O", "R", "T", "E", "X", "A", "M", "P", "L", "E"};
+        mergesort(b);
+        assert isSorted(b);
+        show(b);
+    }
+    
+    public static void quicksortmid(Comparable[] a) 
+    {
+        quicksortmid(a,0,a.length-1);
+    }
+    
+    public static void quicksortmid(Comparable[] a, int min, int max)
+    {
+    	if(min < max)
+    	{
+    		int indexPartition = partition(a,min,max); 
+    		quicksortmid(a,min,indexPartition -1);
+    		quicksortmid(a,indexPartition+1,max);
+    	}
+    }
+    
+    
+    @SuppressWarnings("unchecked")
+	public static int partition(Comparable[] a, int min, int max)
+    {
+    	int left, right, mid;
+    	left = min;
+    	right = max;
+    	mid = (max+min)/2;
+    	if(a[left].compareTo(a[right])>=0 && a[left].compareTo(a[mid])>=0)
+    		mid = left;
+    	if(a[right].compareTo(a[left])>=0 && a[right].compareTo(a[mid])>=0)
+    		mid = right;
+    	
+    	@SuppressWarnings("rawtypes")
+		Comparable element = a[mid];
+    	swap(a,mid,min);
+    	while(left < right)
+    	{
+    		while(left < right && a[left].compareTo(element) <=0)
+    			left++;
+    		while(a[right].compareTo(element)>0)
+    			right--;
+    		if(left < right)
+    			swap(a,left,right);
+    	}
+    	swap(a,min,right);
+    	return right;
+    }
+
+    public static void mergesort(Comparable[] a) 
+    {
+        Comparable[] temp = mergesortRec(a);
+        for(int i = 0; i < a.length; i++)
+        {
+        	a[i] = temp[i];
+        }
+    }
+    
+    public static Comparable[] mergesortRec(Comparable[]a)
+    {
+    	if(a.length >= 2)
+    	{
+    		int mid = (a.length)/2;
+        	Comparable[] lower = new Comparable[mid];
+    		Comparable[] upper = new Comparable[a.length-mid];
+    		Comparable[] temp = new Comparable[a.length];
+    		for(int i = 0; i < lower.length; i++)
+    		{
+    			lower[i] = a[i];
+    		}
+    		for (int i = mid; i< a.length; i++)
+    		{
+    			upper[i-mid] = a[i];
+    		}
+    		mergesortRec(lower);
+    		mergesortRec(upper);
+        	temp = merge(lower,upper);
+        	for(int i = 0; i<temp.length;i++)
+        	{
+        		a[i] = temp[i];
+        	}
+    	}
+    	return a;
+    }
+    
+    @SuppressWarnings("unchecked")
+	public static Comparable[] merge(Comparable[]a,Comparable[]b)
+    {
+		Comparable[] temp = new Comparable[a.length+b.length];
+		
+		int aCurrent = 0;
+		int aEnd = a.length -1;
+		int bCurrent = 0;
+		int bEnd = b.length-1;
+		int index = 0;  // next index open in temp array
+		
+		//  Copy smaller item from each subarray into temp until one
+		//  of the subarrays is exhausted
+		while (aCurrent <= aEnd && bCurrent <= bEnd)
+		{
+			if (a[aCurrent].compareTo(b[bCurrent]) <= 0)
+			{
+				temp[index] = a[aCurrent];
+				aCurrent++;
+			}
+			else
+			{
+				temp[index] = b[bCurrent];
+				bCurrent++;
+			}
+			index++;
+		}
+		
+		//  Copy remaining elements from first subarray, if any
+		while (aCurrent <= aEnd)
+		{
+			temp[index] = a[aCurrent];
+			aCurrent++;
+			index++;
+		}
+		
+		//  Copy remaining elements from second subarray, if any
+		while (bCurrent <= bEnd)
+		{
+			temp[index] = b[bCurrent];
+			bCurrent++;
+			index++;
+		}
+		
+		//  Copy merged data into original array
+//		for(int i = 0; i < temp.length; i++)
+//		{
+//			a[i] = temp[i];
+//		}
+		return temp;
+    }
+    
+    /**
+     * Displays contents of array, space separated.
+     * @author Sedgewick
+     * @param a Array to display.
+     */
+    private static void show(Comparable[] a) {
+        for (Comparable a1 : a)
+            System.out.print(a1 + " ");
+
+        System.out.println();
+    }
+    
+    /**
+     * Checks if array is in sorted order.
+     * @author Sedgewick
+     * @param a Array to be checked.
+     * @return Returns true if array is sorted.
+     */
+    public static boolean isSorted(Comparable[] a) {
+        for (int i = 1; i < a.length; i++)
+            if (less(a[i], a[i-1]))
+                return false;
+        
+        return true;
+    }
+    
+    public static void swap(Comparable[]a, int middle, int min)
+    {
+    	Comparable temp = a[min];
+    	a[min] = a[middle];
+    	a[middle] = temp;
+    }
+    
+    //See previous method.
+    private static boolean less(Comparable v, Comparable w) {
+        return v.compareTo(w) < 0;
+    }
+}
